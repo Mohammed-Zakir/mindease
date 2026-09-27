@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="MindEase — Your AI Mental Wellness Companion. Get information about mental health conditions, symptoms, and self-care strategies.">
+    <meta property="og:title" content="MindEase — AI Mental Health Companion">
+    <meta property="og:description" content="A compassionate AI chatbot for mental wellness information and support.">
+    <title>MindEase — AI Mental Health Companion</title>
+    <link rel="icon" href="{{ url_for('static', filename='favicon.svg') }}" type="image/svg+xml">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="topbar">
+
+    <a href="/logout" class="logout-btn">
+        Logout
+    </a>
+
+</div>
+    <!-- ── Disclaimer Banner ── -->
+    <div class="disclaimer-bar" id="disclaimerBar" role="alert">
+        <span class="disclaimer-icon">⚕️</span>
+        <p><strong>Important:</strong> MindEase provides general wellness information only — it is <em>not</em> a substitute for professional medical advice, diagnosis, or treatment. Always consult a qualified healthcare professional.</p>
+        <button class="disclaimer-close" onclick="closeDisclaimer()" aria-label="Close disclaimer">✕</button>
+    </div>
+
+    <div class="app-shell">
+
+        <!-- ══ LEFT PANEL ══ -->
+        <aside class="left-panel" aria-label="App information">
+            <div class="brand">
+                <div class="brand-icon" aria-hidden="true">
+                    <svg width="44" height="44" viewBox="0 0 44 44" fill="none">
+                        <circle cx="22" cy="22" r="22" fill="rgba(255,255,255,0.15)"/>
+                        <path d="M22 10 C15 10 10 15 10 21 C10 26 13 30 18 32 L18 36 L22 34 L26 36 L26 32 C31 30 34 26 34 21 C34 15 29 10 22 10Z" fill="white" opacity="0.9"/>
+                        <circle cx="18" cy="20" r="2" fill="#4A90D9"/>
+                        <circle cx="26" cy="20" r="2" fill="#4A90D9"/>
+                        <path d="M18 25 Q22 28 26 25" stroke="#4A90D9" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="brand-name">MindEase</h1>
+                    <p class="brand-tagline">AI Wellness Companion</p>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="status-badge">
+                <span class="status-dot" aria-hidden="true"></span>
+                Available 24/7
+            </div>
+
+            <p class="panel-description">
+                A compassionate space to explore mental health information, understand symptoms, and discover self-care strategies.
+            </p>
+
+            <div class="condition-tags" aria-label="Supported topics">
+                <span class="tag">Anxiety</span>
+                <span class="tag">Depression</span>
+                <span class="tag">Stress</span>
+                <span class="tag">Insomnia</span>
+                <span class="tag">PTSD</span>
+                <span class="tag">OCD</span>
+                <span class="tag">ADHD</span>
+                <span class="tag">Phobias</span>
+                <span class="tag">+ more</span>
+            </div>
+
+            <div class="divider"></div>
+
+            <div class="crisis-callout" role="note">
+                <p class="crisis-title">🆘 In crisis?</p>
+                <p class="crisis-text">If you're in immediate distress, please contact:</p>
+                <a href="tel:9152987821" class="crisis-link">iCall India: 9152987821</a>
+                <a href="tel:18602662345" class="crisis-link">Vandrevala: 1860-2662-345</a>
+            </div>
+
+            <p class="disclaimer-footer">
+                ⚕️ This chatbot provides <strong>general information only</strong>. It does not replace professional medical advice.
+            </p>
+        </aside>
+
+        <!-- ══ RIGHT PANEL ══ -->
+        <main class="right-panel">
+            <div class="chat-wrapper">
+
+                <header class="chat-header">
+                    <div class="chat-header-left">
+                        <div class="avatar" aria-hidden="true">🧠</div>
+                        <div>
+                            <h2 class="chat-title">Dr. MindEase</h2>
+                            <p class="chat-subtitle">Mental Wellness AI</p>
+                        </div>
+                    </div>
+                    <div style="display:flex;align-items:center;gap:10px;">
+                        <button class="new-chat-btn" onclick="newChat()" title="Start a new conversation">
+                            ↺ New Chat
+                        </button>
+                        <div class="header-online">
+                            <span class="status-dot" aria-hidden="true"></span>
+                            Online
+                        </div>
+                    </div>
+                </header>
+
+                <div id="chat-box" class="chat-box" role="log" aria-live="polite" aria-label="Chat messages"></div>
+
+                <div class="typing-indicator" id="typingIndicator" aria-hidden="true">
+                    <span></span><span></span><span></span>
+                </div>
+
+                <div class="suggestion-chips" id="suggestionChips" role="list" aria-label="Quick suggestions">
+                    <button class="chip" onclick="sendSuggestion('I feel anxious')" role="listitem">😟 I feel anxious</button>
+                    <button class="chip" onclick="sendSuggestion('I feel depressed')" role="listitem">😔 I feel depressed</button>
+                    <button class="chip" onclick="sendSuggestion('I cannot sleep')" role="listitem">🌙 I can't sleep</button>
+                    <button class="chip" onclick="sendSuggestion('I feel very stressed')" role="listitem">💭 I feel stressed</button>
+                    <button class="chip" onclick="sendSuggestion('I need help with ADHD')" role="listitem">⚡ Help with ADHD</button>
+                </div>
+
+                <form id="chat-form" class="chat-form" novalidate>
+                    <label for="user-input" class="sr-only">Type your message</label>
+                    <input
+                        type="text"
+                        id="user-input"
+                        class="chat-input"
+                        placeholder="Describe how you're feeling..."
+                        autocomplete="off"
+                        maxlength="500"
+                        aria-label="Your message"
+                    >
+                    <button type="submit" class="send-btn" id="sendBtn" aria-label="Send message">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <line x1="22" y1="2" x2="11" y2="13"></line>
+                            <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+                        </svg>
+                    </button>
+                </form>
+
+            </div>
+        </main>
+
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
